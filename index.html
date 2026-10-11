@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CozyBloom • My Gentle Life Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Mitr', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #739072;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-[#FBF9F1] text-[#4F4A45] min-h-screen pb-28">
+
+  <!-- Header & Encouragement Banner -->
+  <header class="bg-[#E5E1DA]/60 backdrop-blur-md sticky top-0 z-30 px-5 py-4 border-b border-[#D8D2C2]/40">
+    <div class="max-w-md mx-auto flex items-center justify-between">
+      <div>
+        <p class="text-xs text-[#8F8174]" id="current-date">วันอาทิตย์ที่ 11 ตุลาคม</p>
+        <h1 class="text-lg font-medium text-[#4F4A45]">สวัสดีคนเก่ง ✨</h1>
+      </div>
+      <button onclick="pickAffirmation()" class="text-xs bg-[#B5C0D0]/30 hover:bg-[#B5C0D0]/50 text-[#5F6F65] px-3 py-1.5 rounded-full transition">
+        🌱 จั่วการ์ดฮีลใจ
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-md mx-auto px-4 mt-4 space-y-5">
+
+    <!-- Dynamic Affirmation Card -->
+    <div class="bg-gradient-to-r from-[#F7EFE5] to-[#F3EEEA] border border-[#EBE3D5] rounded-2xl p-4 shadow-sm relative overflow-hidden">
+      <div class="text-2xl absolute -right-2 -bottom-2 opacity-20">🌸</div>
+      <p class="text-xs font-medium text-[#8F8174] uppercase tracking-wider mb-1">Gentle Reminder</p>
+      <p id="affirmation-text" class="text-sm font-normal leading-relaxed text-[#5F6F65]">
+        "ไม่ว่าวันนี้จะทำได้กี่อย่าง หรือไม่ได้ทำอะไรเลย เธอก็เป็นคนเก่งที่ผ่านวันนี้มาได้เสมอ พักผ่อนให้สบายใจนะ"
+      </p>
+    </div>
+
+    <!-- Big Goals / Career & Money Progression -->
+    <section class="bg-white rounded-2xl p-5 border border-[#EBE3D5] shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-medium text-base text-[#4F4A45] flex items-center gap-2">
+          <span>🚀</span> เป้าหมายใหญ่ของฉัน
+        </h2>
+        <span class="text-xs bg-[#CCD3CA]/40 text-[#5F6F65] px-2 py-0.5 rounded-md">Macro Goals</span>
+      </div>
+
+      <!-- Salary Path -->
+      <div class="bg-[#FBF9F1] p-3.5 rounded-xl border border-[#EBE3D5]/60 space-y-2">
+        <div class="flex justify-between items-baseline text-xs">
+          <span class="font-medium text-[#5F6F65]">เส้นทางเงินเดือน 50,000 บาท</span>
+          <span class="font-semibold text-[#739072]" id="salary-percent">56%</span>
+        </div>
+        <div class="w-full bg-[#E5E1DA] h-2.5 rounded-full overflow-hidden">
+          <div id="salary-bar" class="bg-[#739072] h-full rounded-full transition-all duration-500" style="width: 56%"></div>
+        </div>
+        <div class="flex justify-between text-[11px] text-[#8F8174]">
+          <span>ปัจจุบัน: 28,000 บ.</span>
+          <span>เป้าหมาย: 50,000 บ.</span>
+        </div>
+      </div>
+
+      <!-- Car Fund -->
+      <div class="bg-[#FBF9F1] p-3.5 rounded-xl border border-[#EBE3D5]/60 space-y-2">
+        <div class="flex justify-between items-baseline text-xs">
+          <span class="font-medium text-[#5F6F65]">กองทุนเงินดาวน์รถในฝัน</span>
+          <span class="font-semibold text-[#8F8174]" id="car-fund-text">65,000 / 150,000 บ.</span>
+        </div>
+        <div class="w-full bg-[#E5E1DA] h-2.5 rounded-full overflow-hidden">
+          <div id="car-bar" class="bg-[#B5C0D0] h-full rounded-full transition-all duration-500" style="width: 43%"></div>
+        </div>
+        <div class="flex items-center gap-2 pt-1">
+          <input type="number" id="car-deposit-input" placeholder="ใส่ยอดเงินออมเพิ่ม" class="text-xs w-full bg-white border border-[#D8D2C2] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#739072]" />
+          <button onclick="addCarSavings()" class="text-xs bg-[#739072] text-white px-3 py-1.5 rounded-lg whitespace-nowrap active:scale-95 transition">บันทึก</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Daily Trackers -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-center px-1">
+        <h2 class="font-medium text-base text-[#4F4A45]">บันทึกความสุขและความก้าวหน้าวันนี้ 🌿</h2>
+      </div>
+
+      <!-- 1. Reading Tracker -->
+      <div class="bg-white rounded-2xl p-4 border border-[#EBE3D5] shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium flex items-center gap-1.5">📖 อ่านหนังสือ</span>
+          <span id="read-pct-badge" class="text-xs bg-[#E5E1DA]/60 text-[#5F6F65] px-2 py-0.5 rounded-full">0%</span>
+        </div>
+        <input type="text" id="book-title" placeholder="ชื่อหนังสือที่กำลังอ่าน..." class="w-full text-xs bg-[#FBF9F1] border border-[#EBE3D5] rounded-lg px-3 py-2 focus:outline-none" />
+        <div class="flex items-center gap-2 text-xs">
+          <span>อ่านถึงหน้า:</span>
+          <input type="number" id="book-current-page" class="w-16 bg-[#FBF9F1] border border-[#EBE3D5] rounded-md px-2 py-1 text-center" />
+          <span>จาก</span>
+          <input type="number" id="book-total-page" class="w-16 bg-[#FBF9F1] border border-[#EBE3D5] rounded-md px-2 py-1 text-center" />
+          <span>หน้า</span>
+          <button onclick="calcReading()" class="ml-auto bg-[#739072] text-white px-2.5 py-1 rounded-md text-xs">คำนวณ</button>
+        </div>
+        <textarea id="book-reflection" placeholder="อ่านจบแล้วได้ข้อคิดอะไร หรืออยากรีวิวว่ายังไงบ้าง..." rows="2" class="w-full text-xs bg-[#FBF9F1] border border-[#EBE3D5] rounded-lg p-2.5 focus:outline-none"></textarea>
+      </div>
+
+      <!-- 2. Crochet & Craft Tracker -->
+      <div class="bg-white rounded-2xl p-4 border border-[#EBE3D5] shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium flex items-center gap-1.5">🧶 ถักไหมพรม / งานคราฟต์</span>
+          <span id="craft-pct-label" class="text-xs font-semibold text-[#739072]">30%</span>
+        </div>
+        <input type="text" id="craft-name" placeholder="ชิ้นงานที่กำลังถัก (เช่น กระเป๋าดอกเดซี่)" class="w-full text-xs bg-[#FBF9F1] border border-[#EBE3D5] rounded-lg px-3 py-2 focus:outline-none" />
+        <div>
+          <input type="range" id="craft-slider" min="0" max="100" value="30" class="w-full h-1.5 bg-[#E5E1DA] rounded-lg appearance-none cursor-pointer" oninput="updateCraftSlider(this.value)">
+        </div>
+      </div>
+
+      <!-- 3. Improve My English -->
+      <div class="bg-white rounded-2xl p-4 border border-[#EBE3D5] shadow-sm space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium flex items-center gap-1.5">🇬🇧 Improve My English</span>
+          <span class="text-xs text-[#8F8174]">สะสมคำศัพท์วันนี้</span>
+        </div>
+        <div class="flex items-center justify-between bg-[#FBF9F1] p-3 rounded-xl border border-[#EBE3D5]/60">
+          <span class="text-xs text-[#5F6F65]">จำนวนศัพท์ที่ท่องได้:</span>
+          <div class="flex items-center gap-3">
+            <button onclick="changeVocab(-1)" class="w-7 h-7 bg-white border border-[#D8D2C2] rounded-full text-sm font-bold text-[#8F8174] active:scale-95">-</button>
+            <span id="vocab-count" class="text-base font-semibold text-[#739072] min-w-[20px] text-center">0</span>
+            <button onclick="changeVocab(1)" class="w-7 h-7 bg-[#739072] rounded-full text-sm font-bold text-white active:scale-95">+</button>
+            <button onclick="changeVocab(5)" class="text-[11px] bg-[#B5C0D0]/40 px-2 py-1 rounded-md text-[#5F6F65]">+5</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Course, Workout & Art Check-in -->
+      <div class="bg-white rounded-2xl p-4 border border-[#EBE3D5] shadow-sm space-y-3">
+        <span class="text-sm font-medium">✨ กิจวัตรเติมพลังใจ</span>
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between text-xs bg-[#FBF9F1] p-2.5 rounded-lg border border-[#EBE3D5]/50">
+            <span>🏃 ออกกำลังกาย (คาร์ดิโอ/ยืดเหยียด)</span>
+            <input type="checkbox" id="chk-workout" class="w-4 h-4 accent-[#739072] rounded" />
+          </div>
+          <div class="flex items-center justify-between text-xs bg-[#FBF9F1] p-2.5 rounded-lg border border-[#EBE3D5]/50">
+            <span>🎨 ระบายสี / ทำงานอดิเรกฮีลใจ</span>
+            <input type="checkbox" id="chk-paint" class="w-4 h-4 accent-[#739072] rounded" />
+          </div>
+          <div class="flex items-center justify-between text-xs bg-[#FBF9F1] p-2.5 rounded-lg border border-[#EBE3D5]/50">
+            <span>💻 เรียนคอร์สออนไลน์เพิ่มทักษะ</span>
+            <input type="checkbox" id="chk-course" class="w-4 h-4 accent-[#739072] rounded" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Save Button -->
+    <div class="pt-2">
+      <button onclick="saveAllData()" class="w-full bg-[#739072] hover:bg-[#5F6F65] text-white py-3 rounded-2xl font-medium text-sm shadow-sm active:scale-98 transition flex items-center justify-center gap-2">
+        <span>💾</span> บันทึกความก้าวหน้าของวันนี้
+      </button>
+      <p id="save-status" class="text-center text-xs text-[#739072] mt-2 opacity-0 transition-opacity">บันทึกเรียบร้อยแล้วจ้า 🌷</p>
+    </div>
+
+  </main>
+
+  <script>
+    const affirmations = [
+      "ไม่ว่าวันนี้จะทำได้กี่อย่าง หรือไม่ได้ทำอะไรเลย เธอก็เป็นคนเก่งที่ผ่านวันนี้มาได้เสมอ พักผ่อนให้สบายใจนะ 🤍",
+      "การก้าวไปข้างหน้าทีละ 1% ในทุกวัน วันนี้เธอเข้าใกล้เป้าหมายขึ้นอีกก้าวแล้วนะ 🌱",
+      "การพักผ่อนก็คือความโปรดักทีฟรูปแบบหนึ่ง วันนี้ชาร์จแบตให้เต็มที่เลยนะ 🛋️",
+      "เงินเดือน 50,000 กับรถในฝันกำลังรอเธออยู่ปลายทาง ทำได้แน่นอน! 🚗✨",
+      "อย่าลืมใจดีกับตัวเองให้มากๆ เธอกำลังพยายามอย่างดีที่สุดแล้ว 🌸"
+    ];
+
+    function pickAffirmation() {
+      const idx = Math.floor(Math.random() * affirmations.length);
+      document.getElementById('affirmation-text').innerText = affirmations[idx];
+    }
+
+    let vocabCount = 0;
+    function changeVocab(delta) {
+      vocabCount = Math.max(0, vocabCount + delta);
+      document.getElementById('vocab-count').innerText = vocabCount;
+    }
+
+    function updateCraftSlider(val) {
+      document.getElementById('craft-pct-label').innerText = val + '%';
+    }
+
+    function calcReading() {
+      const cur = parseFloat(document.getElementById('book-current-page').value) || 0;
+      const tot = parseFloat(document.getElementById('book-total-page').value) || 0;
+      if (tot > 0) {
+        const pct = Math.min(100, Math.round((cur / tot) * 100));
+        document.getElementById('read-pct-badge').innerText = pct + '%';
+      }
+    }
+
+    let carFund = 65000;
+    const carGoal = 150000;
+    function addCarSavings() {
+      const amt = parseFloat(document.getElementById('car-deposit-input').value) || 0;
+      if (amt > 0) {
+        carFund += amt;
+        const pct = Math.min(100, Math.round((carFund / carGoal) * 100));
+        document.getElementById('car-fund-text').innerText = carFund.toLocaleString() + ' / ' + carGoal.toLocaleString() + ' บ.';
+        document.getElementById('car-bar').style.width = pct + '%';
+        document.getElementById('car-deposit-input').value = '';
+      }
+    }
+
+    function saveAllData() {
+      const payload = {
+        vocab: vocabCount,
+        carFund: carFund,
+        craftPct: document.getElementById('craft-slider').value,
+        craftName: document.getElementById('craft-name').value,
+        bookTitle: document.getElementById('book-title').value,
+        curPage: document.getElementById('book-current-page').value,
+        totPage: document.getElementById('book-total-page').value,
+        reflection: document.getElementById('book-reflection').value,
+        workout: document.getElementById('chk-workout').checked,
+        paint: document.getElementById('chk-paint').checked,
+        course: document.getElementById('chk-course').checked
+      };
+      localStorage.setItem('gentle_bloom_data', JSON.stringify(payload));
+      
+      const status = document.getElementById('save-status');
+      status.style.opacity = '1';
+      setTimeout(() => { status.style.opacity = '0'; }, 2500);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('gentle_bloom_data');
+      if (saved) {
+        const d = JSON.parse(saved);
+        vocabCount = d.vocab || 0;
+        document.getElementById('vocab-count').innerText = vocabCount;
+        if (d.carFund) {
+          carFund = d.carFund;
+          const pct = Math.min(100, Math.round((carFund / carGoal) * 100));
+          document.getElementById('car-fund-text').innerText = carFund.toLocaleString() + ' / ' + carGoal.toLocaleString() + ' บ.';
+          document.getElementById('car-bar').style.width = pct + '%';
+        }
+        if (d.craftPct) {
+          document.getElementById('craft-slider').value = d.craftPct;
+          document.getElementById('craft-pct-label').innerText = d.craftPct + '%';
+        }
+        document.getElementById('craft-name').value = d.craftName || '';
+        document.getElementById('book-title').value = d.bookTitle || '';
+        document.getElementById('book-current-page').value = d.curPage || '';
+        document.getElementById('book-total-page').value = d.totPage || '';
+        document.getElementById('book-reflection').value = d.reflection || '';
+        document.getElementById('chk-workout').checked = !!d.workout;
+        document.getElementById('chk-paint').checked = !!d.paint;
+        document.getElementById('chk-course').checked = !!d.course;
+        calcReading();
+      }
+    });
+  </script>
+</body>
+</html>
